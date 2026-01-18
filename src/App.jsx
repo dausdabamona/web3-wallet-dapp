@@ -1,6 +1,7 @@
 import { useWallet } from './hooks/useWallet'
 import WalletCard from './components/WalletCard'
 import ConnectButton from './components/ConnectButton'
+import SendTransaction from './components/SendTransaction'
 import './App.css'
 
 /**
@@ -23,7 +24,8 @@ function App() {
     error,
     isMetaMaskInstalled,
     connectWallet,
-    disconnectWallet
+    disconnectWallet,
+    refreshBalance
   } = useWallet()
 
   return (
@@ -71,13 +73,20 @@ function App() {
             )}
           </div>
         ) : (
-          // Sudah terkoneksi - tampilkan info wallet
-          <WalletCard
-            account={account}
-            balance={balance}
-            chainId={chainId}
-            onDisconnect={disconnectWallet}
-          />
+          // Sudah terkoneksi - tampilkan wallet dan send form
+          <div className="wallet-section">
+            <WalletCard
+              account={account}
+              balance={balance}
+              chainId={chainId}
+              onDisconnect={disconnectWallet}
+            />
+            <SendTransaction
+              account={account}
+              chainId={chainId}
+              onTransactionComplete={refreshBalance}
+            />
+          </div>
         )}
 
         {/* Info Section */}

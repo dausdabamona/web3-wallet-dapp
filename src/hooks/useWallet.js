@@ -77,6 +77,13 @@ export function useWallet() {
     setError(null)
   }, [])
 
+  // Fungsi untuk refresh balance (dipanggil setelah transaksi)
+  const refreshBalance = useCallback(() => {
+    if (account) {
+      getBalance(account)
+    }
+  }, [account, getBalance])
+
   // Listen untuk perubahan akun dan network
   useEffect(() => {
     if (!isMetaMaskInstalled) return
@@ -142,6 +149,7 @@ export function useWallet() {
     error,
     isMetaMaskInstalled,
     connectWallet,
-    disconnectWallet
+    disconnectWallet,
+    refreshBalance
   }
 }
