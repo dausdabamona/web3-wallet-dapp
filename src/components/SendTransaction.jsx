@@ -22,7 +22,7 @@ const TX_STATUS = {
   FAILED: 'failed'
 }
 
-function SendTransaction({ account, chainId, onTransactionComplete }) {
+function SendTransaction({ account, chainId, onTransactionComplete, onTransactionSent }) {
   // Form state
   const [recipient, setRecipient] = useState('')
   const [amount, setAmount] = useState('')
@@ -137,6 +137,15 @@ function SendTransaction({ account, chainId, onTransactionComplete }) {
       })
 
       setTxHash(tx.hash)
+
+      // Callback untuk menambah ke history
+      if (onTransactionSent) {
+        onTransactionSent({
+          hash: tx.hash,
+          to: recipient,
+          value: amount
+        })
+      }
 
       // Tunggu konfirmasi
       const receipt = await tx.wait()
